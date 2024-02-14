@@ -1,5 +1,12 @@
 
 var = {}
+constantes = ["dim","myXpos","myYpos"
+            ,"myChips","myBalloons","ballonsHere"
+            ,"ChipsHere","Spaces",]
+directions = {"turn":["left","right","around"],
+              "face":["north", "east", "south", "west"], #face y move-face
+              "dir":["front", "back", "left", "right"], #move y run dirs
+              }
 def upload_txt(txt_direction):
     estado = True
     with open(txt_direction) as txt:
@@ -22,6 +29,8 @@ def processTokens(tokens,p_a,p_c):
     
     if "(" not in tokens[0]:
         return False
+    elif "(null)" == tokens[0]:
+        return True
     elif "def" in tokens[0]:
         if check_parent(p_a,p_c):
             return  False
@@ -48,7 +57,7 @@ def processAsign(tokens):
         if tokens[1] in var:
             try:
                 val = tokens[2]
-
+                print(val)
                 number = int(val[0:len(val)-1])
                 var[tokens[1]] = number
                 return True
@@ -61,7 +70,10 @@ def procDefVar(tokens):
         if tokens[1] not in var:
             try:
                 val = tokens[2]
-
+                val =val[0:len(val)-1]
+                if val in constantes:
+                    var[tokens[1]] = val
+                    return True
                 number = int(val[0:len(val)-1])
                 var[tokens[1]] = number
                 return True
@@ -80,19 +92,6 @@ def process2(tokens):
                 print(number)
                 if not (number in var.keys()):
                     print("a")
-                    number = int(number)
-                return True
-        except:
-                return False
-            
-    return False
-def processSkip(tokens):
-    if len(tokens)==2:
-        try:
-                val = tokens[1]
-
-                number = val[0:len(val)-1]
-                if not (number in var.keys()):
                     number = int(number)
                 return True
         except:
