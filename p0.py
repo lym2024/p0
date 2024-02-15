@@ -2,11 +2,14 @@
 var = {}
 constantes = ["dim","myXpos","myYpos"
             ,"myChips","myBalloons","ballonsHere"
-            ,"ChipsHere","Spaces",]
-directions = {"turn":["left","right","around"],
-              "face":["north", "east", "south", "west"], #face y move-face
-              "dir":["front", "back", "left", "right"], #move y run dirs
+            ,"ChipsHere","Spaces"]
+directions = {"(turn":["left","right","around",],
+              "(face":["north", "east", "south", "west"], #face y move-face
+              "(dir" or "s":["front", "back", "left", "right"], #move y run dirs
+              
               }
+
+
 def upload_txt(txt_direction):
     estado = True
     with open(txt_direction) as txt:
@@ -41,7 +44,7 @@ def processTokens(tokens,p_a,p_c):
         return  processAsign(tokens)
     elif "move-dir" in tokens[0]:
         pass
-    elif "move" in tokens[0] or "skip" in tokens[0]:
+    elif "move" in tokens[0] or "skip" in tokens[0] or "turn" in tokens[0] or "face" in tokens[0] or "run-dirs" in tokens[0]:
         return process2(tokens)
     elif len(tokens) == 1 and "(" == tokens[0]:
         return True
@@ -81,12 +84,10 @@ def procDefVar(tokens):
                 return False
         
     return False
-def process2(tokens):
-    print("asdfds")
+def process2(tokens,key):
     if len(tokens)==2:
         try:
                 val = tokens[1]
-                print(val)
                 number = val[0:len(val)-1]
                 print(var.keys())
                 print(number)
