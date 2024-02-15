@@ -52,6 +52,8 @@ def processTokens(first,tokens,p_a,p_c):
         return process2(first,tokens)
     elif len(tokens) == 1 and "(" == first:
         return True
+    elif "(" in first and tokens[1] == "if":
+        return processLoop() 
     else:
         return False
 def check_parent(p_a,p_c):
@@ -105,4 +107,7 @@ def process2(key,tokens):
                 return False
             
     return False
+
+def processLoop():
+    print("Feliz cumpleaños Jimmy")
 print(upload_txt("prueba.txt"))
