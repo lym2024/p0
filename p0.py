@@ -3,10 +3,17 @@ var = {}
 constantes = ["dim","myXpos","myYpos"
             ,"myChips","myBalloons","ballonsHere"
             ,"ChipsHere","Spaces",]
-directions = {"turn":["left","right","around"],
-              "face":["north", "east", "south", "west"], #face y move-face
-              "dir":["front", "back", "left", "right"], #move y run dirs
-              }
+posVal = {
+    "(move":constantes,
+    "(skip":constantes,
+    "(turn":["left","right","around"],
+    "(face":["north", "east", "south", "west"], #face
+    "(put":["balloons","chips"],#put
+    "(pick":["balloons","chips"],#pick
+    "(move-dir":["front", "back", "left", "right"],#move-dir
+    "(runs-dir":["front", "back", "left", "right"],#runs-dir
+    "(move-face":["north", "east", "south", "west"], #move-face                
+        }
 def upload_txt(txt_direction):
     estado = True
     with open(txt_direction) as txt:
@@ -20,30 +27,30 @@ def upload_txt(txt_direction):
                 continue
             tokens = line.split()
 
-            estado = processTokens(tokens,p_a,p_c)
+            estado = processTokens(tokens[0],tokens,p_a,p_c)
             if estado == False:
                 break
 
     return estado
-def processTokens(tokens,p_a,p_c):
+def processTokens(first,tokens,p_a,p_c):
     
-    if "(" not in tokens[0]:
+    if "(" not in first:
         return False
-    elif "(null)" == tokens[0]:
+    elif "(null)" == first:
         return True
-    elif "def" in tokens[0]:
+    elif "def" in first:
         if check_parent(p_a,p_c):
             return  False
         return processDef(tokens)
-    elif "=" in tokens[0]:
+    elif "=" in first:
         if check_parent(p_a,p_c):
             return  False
         return  processAsign(tokens)
-    elif "move-dir" in tokens[0]:
+    elif "move-dir" in first:
         pass
-    elif "move" in tokens[0] or "skip" in tokens[0]:
-        return process2(tokens)
-    elif len(tokens) == 1 and "(" == tokens[0]:
+    elif "move" in first or "skip" in first or "turn" in first or "face" in first:
+        return process2(first,tokens)
+    elif len(tokens) == 1 and "(" == first:
         return True
     else:
         return False
@@ -81,18 +88,18 @@ def procDefVar(tokens):
                 return False
         
     return False
-def process2(tokens):
-    print("asdfds")
+def process2(key,tokens):
     if len(tokens)==2:
         try:
                 val = tokens[1]
-                print(val)
-                number = val[0:len(val)-1]
-                print(var.keys())
-                print(number)
-                if not (number in var.keys()):
-                    print("a")
-                    number = int(number)
+                lst = posVal[key]
+
+                val = val[0:len(val)-1]
+                if val in lst:
+                    return True
+                if val in var.keys():
+                    return True
+                number = int(number)
                 return True
         except:
                 return False
