@@ -15,8 +15,13 @@ posVal = {
     "(move-face":["north", "east", "south", "west"], #move-face                
     }
 moveDir = [":north",":south",":east",":west"]
-dir = ["north","south","east","west"]
-condicionales = ["(facing?","(blocked?)","(can-put?","(can-pick?","(can-move?","(not"]
+dir = ["north)","south)","east)","west)","north","south","east","west"]
+condicionales = ["(facing?","facing?",
+                 "(blocked?)","blocked?","blocked?)","(blocked?",
+                 "(can-put?","can-put?"
+                 "(can-pick?", "can-pick?"
+                 "(can-move?", "can-move"
+                 "(not","not"]
 
 def upload_txt(txt_direction):
     estado = True
@@ -117,7 +122,19 @@ def process2(key,tokens):
     return False
 
 def processConditional(tokens):
-    if tokens[0] in condicionales:
-
-        print("Feliz cumpleaños Jimmy")
+    inst = tokens[1]
+    if inst in condicionales:
+        if "facing?" in inst:
+            if tokens[2] in dir:
+                return True
+            else:
+                return False
+        elif "(blocked?)" in inst:
+            return True    
+        elif "can-p" in inst:
+            print("LOL")            
+        else:
+            print("Feliz cumpleaños Jimmy")
+    else:
+        return False
 print(upload_txt("prueba.txt"))
