@@ -1,4 +1,4 @@
-(defvar rot Dim)
+(defvar left Dim)
 (= rot 4778)
 (move 2)
 (skip rot)
