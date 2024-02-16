@@ -13,7 +13,11 @@ posVal = {
     "(move-dir":["front", "back", "left", "right"],#move-dir
     "(runs-dir":["front", "back", "left", "right"],#runs-dir
     "(move-face":["north", "east", "south", "west"], #move-face                
-        }
+    }
+moveDir = [":north",":south",":east",":west"]
+dir = ["north","south","east","west"]
+condicionales = ["(facing?","(blocked?)","(can-put?","(can-pick?","(can-move?","(not"]
+
 def upload_txt(txt_direction):
     estado = True
     with open(txt_direction) as txt:
@@ -52,8 +56,8 @@ def processTokens(first,tokens,p_a,p_c):
         return process2(first,tokens)
     elif len(tokens) == 1 and "(" == first:
         return True
-    elif "(" in first and tokens[1] == "if":
-        return processLoop() 
+    elif "(if" in first:
+        return processConditional() 
     else:
         return False
 def check_parent(p_a,p_c):
@@ -108,6 +112,8 @@ def process2(key,tokens):
             
     return False
 
-def processLoop():
-    print("Feliz cumpleaños Jimmy")
+def processConditional(tokens):
+    if tokens[0] in condicionales:
+
+        print("Feliz cumpleaños Jimmy")
 print(upload_txt("prueba.txt"))
