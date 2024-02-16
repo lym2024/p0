@@ -2,13 +2,21 @@
 var = {}
 constantes = ["dim","myXpos","myYpos"
             ,"myChips","myBalloons","ballonsHere"
-            ,"ChipsHere","Spaces"]
-directions = {"(turn":["left","right","around"],
-              "(face":["north", "east", "south", "west"], #face y move-face
-              "(dir" or "s":["front", "back", "left", "right"], #move y run dirs
-              
-              }
-
+            ,"ChipsHere","Spaces",]
+posVal = {
+    "(move":constantes,
+    "(skip":constantes,
+    "(turn":["left","right","around"],
+    "(face":["north", "east", "south", "west"], #face
+    "(put":["balloons","chips"],#put
+    "(pick":["balloons","chips"],#pick
+    "(move-dir":["front", "back", "left", "right"],#move-dir
+    "(runs-dir":["front", "back", "left", "right"],#runs-dir
+    "(move-face":["north", "east", "south", "west"], #move-face                
+    }
+moveDir = [":north",":south",":east",":west"]
+dir = ["north","south","east","west"]
+condicionales = ["(facing?","(blocked?)","(can-put?","(can-pick?","(can-move?","(not"]
 
 def upload_txt(txt_direction):
     estado = True
@@ -23,31 +31,33 @@ def upload_txt(txt_direction):
                 continue
             tokens = line.split()
 
-            estado = processTokens(tokens,p_a,p_c)
+            estado = processTokens(tokens[0],tokens,p_a,p_c)
             if estado == False:
                 break
 
     return estado
-def processTokens(tokens,p_a,p_c):
+def processTokens(first,tokens,p_a,p_c):
     
-    if "(" not in tokens[0]:
+    if "(" not in first:
         return False
-    elif "(null)" == tokens[0]:
+    elif "(null)" == first:
         return True
-    elif "def" in tokens[0]:
+    elif "def" in first:
         if check_parent(p_a,p_c):
             return  False
         return processDef(tokens)
-    elif "=" in tokens[0]:
+    elif "=" in first:
         if check_parent(p_a,p_c):
             return  False
         return  processAsign(tokens)
-    elif "move-dir" in tokens[0]:
+    elif "move-dir" in first:
         pass
-    elif "move" in tokens[0] or "skip" in tokens[0] or "turn" in tokens[0] or "face" in tokens[0]:
-        return process2(tokens)
-    elif len(tokens) == 1 and "(" == tokens[0]:
+    elif "move" in first or "skip" in first or "turn" in first or "face" in first:
+        return process2(first,tokens)
+    elif len(tokens) == 1 and "(" == first:
         return True
+    elif "(if" in first:
+        return processConditional() 
     else:
         return False
 def check_parent(p_a,p_c):
@@ -69,8 +79,8 @@ def processAsign(tokens):
     return False
 def procDefVar(tokens):
     noExiste = True
-    for x in directions.keys():
-        if tokens[1] in directions[x] :
+    for x in posVal.keys():
+        if tokens[1] in posVal[x] :
             noExiste = False
             
     if len(tokens)<=3:
@@ -88,19 +98,26 @@ def procDefVar(tokens):
                 return False
         
     return False
-def process2(tokens,key):
+def process2(key,tokens):
     if len(tokens)==2:
         try:
                 val = tokens[1]
-                if val in directions[key]:
+                lst = posVal[key]
+
+                val = val[0:len(val)-1]
+                if val in lst:
                     return True
-                number = val[0:len(val)-1]
-               
-                if not (number in var.keys()):
-                    number = int(number)
+                if val in var.keys():
+                    return True
+                number = int(number)
                 return True
         except:
                 return False
             
     return False
+
+def processConditional(tokens):
+    if tokens[0] in condicionales:
+
+        print("Feliz cumpleaños Jimmy")
 print(upload_txt("prueba.txt"))

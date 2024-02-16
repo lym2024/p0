@@ -1,6 +1,6 @@
 (defvar left Dim)
 (= rot 4778)
-(move 2)
+(move Dim)
 (skip rot)
 (defun blocked-p ()
   (not (can-move-p :north)))
