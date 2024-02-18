@@ -1,5 +1,8 @@
-(defvar left Dim)
+(     defvar rot Dim)
+	( move-face rot :east )
+( run-dirs :left :front :left :back :right)
 (= rot 4778)
+(move 40)
 (move Dim)
 (skip rot)
 (defun blocked-p ()
@@ -22,6 +25,6 @@
   (repeat Spaces (if (not (isZero? myChips)) (put :chips 1))))
 (defun pickAllB ()
   (pick :balloons balloonsHere))
-(run-dirs :left :up :left :down :right)
+
 
 
