@@ -1,5 +1,6 @@
 (     defvar rot Dim)
 	( move-face rot :east )
+(pick :ballons 4)
 ( run-dirs :left :front :left :back :right)
 (= rot 4778)
 (move 40)

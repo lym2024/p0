@@ -78,6 +78,12 @@ def processTokens(first,tokens,p_a,p_c):
         return True
     elif "(if" in first:
         return processConditional() 
+    elif "put" in first or "pick" in first or "put" == tokens[1] or "pick" == tokens[1]:
+        if "put" == tokens[1] or "pick" == tokens[1]:
+            tokens = Juntar_0_1(tokens)
+        elif ")" == tokens[len(tokens)-1]:
+            tokens = juntar_final(tokens)
+        return process_p(tokens)
     else:
         return False
 def check_parent(p_a,p_c):
@@ -200,6 +206,24 @@ def process_movDir(tokens):
         return True
     else:
         return False
+def process_p(tokens):
+    if len(tokens)<4 and ")" not in tokens[0]:
+        try:
+            x = tokens[1]
+            val = tokens[2]
+            if x not in [":ballons" or ":chips"]:
+                return False
+            if ")" in val:
+                val = val[0:len(val)-1]
+            if val not in var.keys():
+                    int(val)
+            
+            return True
+        except:
+            return False
+    else:
+       return False 
+   
 def Juntar_0_1(tokens):
     pos = ""
     lst = []
@@ -216,6 +240,17 @@ def Juntar_0_1(tokens):
         else:
             lst.append(tokens[i])
     
+    return lst
+def juntar_final(tokens):
+
+    lst = []
+    print(tokens)
+    for i in range(0,len(tokens)):
+        if i == len(tokens)-2 and ")" == tokens[i+1]:
+            lst.append(tokens[i]+tokens[i+1])
+            return lst
+        else:
+            lst.append(tokens[i])
     return lst
 print(upload_txt("prueba.txt"))
 
