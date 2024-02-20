@@ -44,7 +44,9 @@ def upload_txt(txt_direction):
 
     return estado
 def processTokens(first,tokens,p_a,p_c):
-    if "(" not in first:
+    if first == "(":
+        tokens = Juntar_0_1(tokens)
+    elif "(" not in first:
         return False
     elif "(null)" == first:
         return True
@@ -76,7 +78,7 @@ def processTokens(first,tokens,p_a,p_c):
         return process2(first,tokens)
     elif len(tokens) == 1 and "(" == first:
         return True
-    elif "(if" in first:
+    elif "(if" in tokens[0]:
         return processConditional() 
     elif "put" in first or "pick" in first or "put" == tokens[1] or "pick" == tokens[1]:
         if "put" == tokens[1] or "pick" == tokens[1]:
@@ -150,22 +152,73 @@ def process2(key,tokens):
     return False
 
 def processConditional(tokens):
-    inst = tokens[1]
-    if inst in condicionales:
-        if "facing?" in inst:
-            if tokens[2] in dir:
+
+    if tokens[1] == "(":
+        tokens.pop(0)
+        tokens = Juntar_0_1(tokens)
+
+    condicion = tokens[0]
+    if condicion not in condicionales:
+        return False
+    elif condicion == "(facing?":
+        if tokens[1] in moveDir and tokens[2]==")" or tokens[1] in moveDir:
+            return True
+        else:
+            return False
+    elif condicion == "(blocked?)" :
+        return True
+    elif condicion == "(blocked?" :
+        if tokens[-1] == ")":
+            return True
+        else:
+            return False
+        
+    elif "(can-put?" == condicion or "(can-pick?" == condicion:
+        if tokens[1] == "chips" or tokens[1] == "balloons" :
+            value = tokens[2]
+            value.strip(")")
+            try:
+                int(value)
+                if value != 0:
+                    return True 
+                else: 
+                    return False
+            except:
+                return False
+
+        else:
+            return False 
+    
+    elif "(can-move?" == condicion:
+        dir = tokens[1]
+        dir.strip(")")
+        if dir in moveDir:
+            if tokens[-1] == ")":
                 return True
             else:
                 return False
-        elif "(blocked?)" in inst:
-            return True    
-        elif "can-p" in inst:
-            print("LOL")            
         else:
-            print("Feliz cumpleaños Jimmy")
+            return False
+    
+    elif "(isZero?" == condicion:
+        value = tokens[1]
+        value.strip(")")
+        try:
+            int(value)
+            if value != 0:
+                return True 
+            else: 
+                return False
+        except:
+            return False
+    
+    elif "(not" == condicion:
+        tokens.pop(0)
+        return processConditional(tokens)
+    
     else:
         return False
-
+    
 def process_run(tokens):
     for i in tokens:
         if i == "(run-dirs" :
