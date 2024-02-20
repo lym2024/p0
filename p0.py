@@ -1,6 +1,6 @@
 
 #Jaime Esteban Moreno Jaramillo - 202220189
-#Thomas Bonnet
+#Thomas Bonnett - 202225550
 
 var = {}
 constantes = ["dim","myxpos","mypos"
