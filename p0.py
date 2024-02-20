@@ -1,4 +1,7 @@
 
+#Jaime Esteban Moreno Jaramillo - 202220189
+#Thomas Bonnet
+
 var = {}
 constantes = ["dim","myxpos","mypos"
             ,"mychips","myballoons","ballonshere"
@@ -86,6 +89,8 @@ def processTokens(first,tokens,p_a,p_c):
         elif ")" == tokens[len(tokens)-1]:
             tokens = juntar_final(tokens)
         return process_p(tokens)
+    elif "(repeat" == first:
+        return processRepeat(tokens)
     else:
         return False
 def check_parent(p_a,p_c):
@@ -276,7 +281,16 @@ def process_p(tokens):
             return False
     else:
        return False 
-   
+def processRepeat(tokens):
+    lst = []
+    try:
+        if tokens[1] not in var.keys():
+            int(tokens[1])
+        for i in range(2,len(tokens)):
+            lst.append(tokens[i])
+        return processTokens(lst[0],lst)
+    except:
+        return False
 def Juntar_0_1(tokens):
     pos = ""
     lst = []
