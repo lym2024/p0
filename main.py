@@ -31,13 +31,13 @@ def upload_txt(txt_direction):
     estado = True
     with open(txt_direction) as txt:
         for line in txt:
-            print(line)
+ 
             p_a =line.count("(")
             p_c = line.count(")")
             line = line.lower() 
-            print(line)
+
             line = line.strip()
-            print(line)
+
             if not line:
                 continue
             tokens = line.split()
@@ -49,6 +49,7 @@ def upload_txt(txt_direction):
 def processTokens(first,tokens,p_a,p_c):
     if first == "(":
         tokens = Juntar_0_1(tokens)
+        return processTokens(tokens[0],tokens,p_a,p_c)
     elif "(" not in first:
         return False
     elif "(null)" == first:
@@ -57,6 +58,7 @@ def processTokens(first,tokens,p_a,p_c):
         if "def" in tokens[1]:
             tokens = Juntar_0_1(tokens)
         if check_parent(p_a,p_c):
+
             return  False
         return processDef(tokens)
     elif "=" in first or "=" in tokens[1]:
@@ -103,7 +105,7 @@ def processAsign(tokens):
         if tokens[1] in var:
             try:
                 val = tokens[2]
-                print(val)
+
                 number = int(val[0:len(val)-1])
                 var[tokens[1]] = number
                 return True
@@ -116,32 +118,30 @@ def procDefVar(tokens):
         if tokens[1] in posVal[x] :
 
             noExiste = False
-
     if len(tokens)<=3:
         if tokens[1] not in var.keys() and tokens[1] not in constantes and noExiste:
             try:
                 val = tokens[2]
                 val =val[0:len(val)-1]
-
                 if val in constantes:
                     var[tokens[1]] = val
                     return True
                 number = int(val[0:len(val)-1])
+
                 var[tokens[1]] = number
+  
                 return True
             except:
                 return False
-        
     return False
 def process2(key,tokens):
-    print("sagkhsahkjslhkjsddsklij")
     if len(tokens)==2:
         try:
                 val = tokens[1]
                 lst = posVal[key]
 
                 val = val[0:len(val)-1]
-                print(val)
+
                 if val in lst:
                     return True
                 if val in var.keys():
@@ -243,11 +243,11 @@ def process_movDir(tokens):
 
     if len(tokens)<5:
         try:
-            print(tokens)
+
             if not(tokens[1] in var.keys()):
                 int(tokens[1])
             val = tokens[2]
-            print(val)
+
             if ")" in val:
                     val =val[0:len(val)-1]
             if"dir" in tokens[0]:
@@ -284,9 +284,12 @@ def process_p(tokens):
 def processRepeat(tokens):
     lst = []
     try:
+        
         if tokens[1] not in var.keys():
             int(tokens[1])
         for i in range(2,len(tokens)):
+            if i == len(tokens)-1:
+                lst.append(tokens[i][0:len(tokens[i])-1])
             lst.append(tokens[i])
         return processTokens(lst[0],lst)
     except:
@@ -294,7 +297,7 @@ def processRepeat(tokens):
 def Juntar_0_1(tokens):
     pos = ""
     lst = []
-    print(tokens)
+
     for i in range(0,len(tokens)):
         if i == 0:
             pos += tokens[i]
@@ -311,7 +314,7 @@ def Juntar_0_1(tokens):
 def juntar_final(tokens):
 
     lst = []
-    print(tokens)
+
     for i in range(0,len(tokens)):
         if i == len(tokens)-2 and ")" == tokens[i+1]:
             lst.append(tokens[i]+tokens[i+1])
